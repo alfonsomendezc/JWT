@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Context } from "../store/appContext";
+import { useHistory } from "react-router-dom";
 import "../../styles/home.css";
 
 export const SignUp = () => {
@@ -16,7 +17,13 @@ export const SignUp = () => {
     repeat: false,
   });
 
-  const handleSubmit = () => {console.log('hola')}
+  const handleSubmit = () => {
+    history.push("/private");
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const history = useHistory();
 
   return (
     <>
@@ -92,15 +99,15 @@ export const SignUp = () => {
                             >
                               Password
                             </label>
+                            <div className="d-flex">
                             <input
-                              type="password"
+                              type={showPassword ? "text" : "password"}
                               id="form3Example4c"
                               className="form-control"
                               onChange={(e) => setPassword(e.target.value)}
                               onBlur={(e) => {
                                 let regex =
                                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                                console.log(regex.test(password));
                                 if (regex.test(password)) {
                                   setErrors({ ...errors, password: false });
                                 } else {
@@ -108,6 +115,18 @@ export const SignUp = () => {
                                 }
                               }}
                             />
+                            <button
+                              className={
+                                showPassword
+                                  ? "fa fa-eye-slash"
+                                  : "fa fa-eye password-icon"
+                              }
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setShowPassword(!showPassword);
+                              }}
+                            ></button>
+                          </div>
                             {errors.password && (
                             <div className="text-secondary">
                               You should have at least: 8 characters, 1 lower-case letter, 

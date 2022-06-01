@@ -28,6 +28,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));
 			},
+			register: async (data) => {
+				let response = await fetch(`${process.env.BACKEND_URL}/sign-up`, {
+				  method: "POST",
+				  headers: { "Content-Type": "application/json" },
+				  body: JSON.stringify(data),
+				});
+				if (response.ok) {
+				  let data = response.json();
+				  localStorage.setItem("token", data.token);
+				  return true;
+				} else return false;
+			},
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
