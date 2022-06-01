@@ -5,16 +5,18 @@ import "../../styles/home.css";
 
 export const SignUp = () => {
   const { store, actions } = useContext(Context);
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [repeat, setRepeat] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeat, setRepeat] = useState("");
   const [check, setCheck] = useState(false);
   const [errors, setErrors] = useState({
     email: false,
     password: false,
     repeat: false,
   });
+
+  const handleSubmit = () => {console.log('hola')}
 
   return (
     <>
@@ -52,36 +54,66 @@ export const SignUp = () => {
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
-                            <input
-                              type="email"
-                              id="form3Example3c"
-                              className="form-control"
-                              onChange={(e) => setEmail(e.target.value)}
-                            />
                             <label
                               className="form-label"
                               htmlFor="form3Example3c"
                             >
                               Your Email
                             </label>
+                            <input
+                              type="email"
+                              id="form3Example3c"
+                              className="form-control"
+                              onChange={(e) => setEmail(e.target.value)}
+                              onBlur={(e) => {
+                                let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+                                console.log(regex.test(email));
+                                if (regex.test(email)) {
+                                  setErrors({ ...errors, email: false });
+                                } else {
+                                  setErrors({ ...errors, email: true });
+                                }
+                              }}
+                              />
+                              {errors.email && (
+                                <div className="text-secondary">
+                                  Invalid E-Mail!
+                                </div>
+                              )}
                           </div>
                         </div>
 
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
-                            <input
-                              type="password"
-                              id="form3Example4c"
-                              className="form-control"
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
                             <label
                               className="form-label"
                               htmlFor="form3Example4c"
                             >
                               Password
                             </label>
+                            <input
+                              type="password"
+                              id="form3Example4c"
+                              className="form-control"
+                              onChange={(e) => setPassword(e.target.value)}
+                              onBlur={(e) => {
+                                let regex =
+                                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                                console.log(regex.test(password));
+                                if (regex.test(password)) {
+                                  setErrors({ ...errors, password: false });
+                                } else {
+                                  setErrors({ ...errors, password: true });
+                                }
+                              }}
+                            />
+                            {errors.password && (
+                            <div className="text-secondary">
+                              You should have at least: 8 characters, 1 lower-case letter, 
+                              1 upper-case letter, 1 number and a special character
+                            </div>
+                          )}
                           </div>
                         </div>
 
@@ -107,7 +139,11 @@ export const SignUp = () => {
                                 }
                               }}
                             />
-                            {errors.repeat && <p>Passwords not matching!</p>}
+                            {errors.repeat && (
+                            <div className="text-secondary">
+                              Incorrect password, check again!
+                            </div>
+                          )}
                           </div>
                         </div>
 
@@ -132,6 +168,8 @@ export const SignUp = () => {
                           <button
                             type="button"
                             className="btn btn-primary btn-lg"
+                            onClick={handleSubmit}
+                            disabled={errors.email||errors.password||errors.repeat||!check||!name.length>0||!email.length>0||!password.length>0||!repeat.length>0}
                           >
                             Register
                           </button>
