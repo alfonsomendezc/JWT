@@ -18,7 +18,18 @@ export const SignUp = () => {
   });
 
   const handleSubmit = () => {
-    history.push("/private");
+    let data = {
+      name : name,
+      email : email,
+      password : password
+    }
+    if (actions.registerUser(data)) {
+      history.push("/private");
+    } else {
+      alert("El usuario ya esta creado, intente de nuevo")
+    }
+    
+    
   };
 
   const [showPassword, setShowPassword] = useState(false);

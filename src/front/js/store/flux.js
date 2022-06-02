@@ -1,4 +1,5 @@
 const getState = ({ getStore, getActions, setStore }) => {
+	const API_URL = process.env.BACKEND_URL;
 	return {
 		store: {
 			message: null,
@@ -23,12 +24,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getMessage: () => {
 				// fetching data from the backend
-				fetch(process.env.BACKEND_URL + "/api/hello")
+				fetch(`${API_URL}` + "/api/hello")
 					.then(resp => resp.json())
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));
 			},
-			register: async (data) => {
+			registerUser: async (data) => {
 				let response = await fetch(`${process.env.BACKEND_URL}/sign-up`, {
 				  method: "POST",
 				  headers: { "Content-Type": "application/json" },
